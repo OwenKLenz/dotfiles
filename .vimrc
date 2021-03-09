@@ -125,3 +125,5 @@ nmap <leader>= gg=G<C-o><C-o>
 
 "Using steven-liou/console-puts plugin, shortcut for logging a value on one line (Ruby, JS, Python and Go only)
 nmap <leader>l cp0j
+
+"Hello"
