@@ -4,8 +4,9 @@ if empty(glob('~/.vim/autoload/plug.vim'))
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
-
 call plug#begin('~/.vim/plugged')
+  Plug 'preservim/nerdtree'
+  Plug 'ryanoasis/vim-devicons'
   Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-surround'
   Plug '907th/vim-auto-save'
@@ -13,70 +14,80 @@ call plug#begin('~/.vim/plugged')
   Plug 'morhetz/gruvbox'
   Plug 'MarcWeber/vim-addon-mw-utils'
   Plug 'tomtom/tlib_vim'
-  Plug 'garbas/vim-snipmate'
   Plug 'alvan/vim-closetag'
   Plug 'maxmellon/vim-jsx-pretty'
   Plug 'steven-liou/console-puts'
-  Plug 'metakirby5/codi.vim'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+
+	" Javascript plugins
+  Plug 'sheerun/vim-polyglot'
 call plug#end()
 
-let g:snipMate = { 'snippet_version' : 1 }
-
+" Set color scheme
 colorscheme gruvbox
 set bg=dark
 
-" Line numbers
+" Use line numbers
 set number
-set relativenumber
 
-" Lets you backspace past the point where you activated insert mode
+" Allows backspacing past the point where insert mode was activated
 set backspace=indent,eol,start
 
 " Allows case insensitive searching. Will perform case sensitive search when capital letters are used.
 set ignorecase
 set smartcase
 
-" Searchs are performed actively as you type
+" Searches are performed actively as you type
 set incsearch
-
-" Unbind some useless/annoying default key bindings.
-nmap Q <Nop>
-
-" Disable audible bell because it's annoying.
-set noerrorbells visualbell t_vb=
-
-" Set tabs to two spaces
-set expandtab " Insert spaces instead of tabs
-
-set smarttab " forces use of shiftwidth and tabstop
-
-set shiftwidth=2 " Change the number of spaces inserted for indentation
-
-set tabstop=2 " Tabs insert 4 spaces
-
-" Maintain indentation
-set smartindent
-set autoindent
-
-" allow windows clipboard copying
-set clipboard=unnamed
-
-" :sp command opens new window on right side of screen
-set splitright
 
 " Set highlight all search results at once
 set hlsearch
+
 " Clear highlighted search results with enter
 nnoremap <CR> :noh<CR><CR>
+
+" Search into subfolders
+" Provide tab autocompletion for all file related tasks
+set path+=**
+
+
+" Unbind Q from entering :Ex mode
+nmap Q <Nop>
+
+" Disable annoying audible bell
+set noerrorbells visualbell t_vb=
+
+" Tab and indent config
+set expandtab " Insert spaces instead of tabs
+set smarttab " forces use of shiftwidth and tabstop
+set shiftwidth=2 " Change the number of spaces inserted for indentation
+set tabstop=2 " Tabs insert 4 spaces
+set smartindent
+set autoindent
+
+" Display 80 char line
+set cc=80
+
+" Intuitive split navigation
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+" Don't create swapfiles
+set noswapfile
 
 " Map 0 to jump to the beginning of any text on the current line
 map 0 ^
 
-" Allow intuitive navigation through wrapped lines
+" For intuitive navigation through wrapped lines
 nmap j gj
 nmap k gk
 
 " WSL yank support to windows clipboard
+set clipboard=unnamed
 let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point
 if executable(s:clip)
   augroup WSLYank
@@ -85,7 +96,7 @@ if executable(s:clip)
   augroup END
 endif
 
-" Set paste mode toggle. Required to prevent indentation issues when pasting to vim from windows clipboard
+" Set paste mode toggle. Prevents indentation issues when pasting to vim from Windows clipboard
 set pastetoggle=<insert>
 
 " Enable vim-auto-save by default
@@ -95,14 +106,10 @@ let g:auto_save = 1
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
-" Search into subfolders
-" Provide tab autocompletion for all file related tasks
-set path+=**
-
 " Deactivate autocommenting newlines following a previously commented line
 autocmd FileType * set formatoptions-=cro
 
-" Allow colorscheme to work in tmux (on WSL anyway)
+" Needed for colorscheme to work in tmux (on WSL anyway)
 set background=dark
 set t_Co=256
 
@@ -123,7 +130,29 @@ nmap <leader>s ysiw
 "Autoindent everything and return to where you left off
 nmap <leader>= gg=G<C-o><C-o>
 
-"Using steven-liou/console-puts plugin, shortcut for logging a value on one line (Ruby, JS, Python and Go only)
+"Easy binding for autologging lines of code (steven-liou/console-puts plugin)
 nmap <leader>l cp0j
 
-"hi"
+"Save+quit remapping
+nmap <leader>q :wq<CR>
+
+" NERDTree config
+nmap <leader>t :NERDTreeFind<CR>
+let NERDTreeQuitOnOpen=1
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" fzf config
+nmap <leader>f :GFiles<CR>
+
+" Enable CoC jump to definition
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gr <Plug>(coc-references)
+
+if ! has('gui_running')
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=1000
+    augroup END
+endif

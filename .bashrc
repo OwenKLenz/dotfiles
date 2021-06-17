@@ -109,12 +109,13 @@ fi
 export PATH="$HOME/.rbenv/bin:~/bin:$PATH"
 eval "$(rbenv init -)"
 
+
 # Turn on vim  keybinds in bash
 set -o vi
 
-# Set default editor when using \e metacommand in psql to be vscode.
+# Set default editor when using \e metacommand in psql
 export EDITOR="vim"
-export VISUAL="code -w"
+export VISUAL="vim"
 
-swords=$'\xE2\x9A\x94'
-export PS1="\[\e[31m\]$swords [\[\e[m\]\[\e[32m\]\u\[\e[m\]\[\e[32m\]@\[\e[32m\]wsl-terminal:\[\e[37m\]\w\[\e[m\]\[\e[31m\]]$swords \[\e[m\]\[\e[35m\]\n\r\$\[\e[m\] "
+export PS1="\e[31m\][\[\e[m\]\[\e[32m\]\u\[\e[m\]\[\e[32m\]@\[\e[32m\]wsl-terminal:\[\e[37m\]\w\[\e[m\]\[\e[31m\]\[\e[m\]\[\e[35m\]]\$\[\e[m\] "
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
