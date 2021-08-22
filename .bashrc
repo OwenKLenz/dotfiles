@@ -81,7 +81,7 @@ fi
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
-alias l='ls -CFlah'
+# alias l='ls -CFlah'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -110,6 +110,13 @@ export PATH="$HOME/.rbenv/bin:~/bin:$PATH"
 eval "$(rbenv init -)"
 
 
+# Start Docker daemon automatically when logging in if not running.
+RUNNING=`ps aux | grep dockerd | grep -v grep`
+if [ -z "$RUNNING" ]; then
+    sudo dockerd > /dev/null 2>&1 &
+    disown
+fi
+
 # Turn on vim  keybinds in bash
 set -o vi
 
@@ -119,3 +126,7 @@ export VISUAL="vim"
 
 export PS1="\e[31m\][\[\e[m\]\[\e[32m\]\u\[\e[m\]\[\e[32m\]@\[\e[32m\]wsl-terminal:\[\e[37m\]\w\[\e[m\]\[\e[31m\]\[\e[m\]\[\e[35m\]]\$\[\e[m\] "
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

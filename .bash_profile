@@ -5,7 +5,7 @@ source ~/.bashrc
 
 # Custom functions
 cdl() { cd "$@" && ls -a; } # cd and display new directory info
-mkcd() { mkdir "$@" && cd "$@"; }
+mcd() { mkdir "$@" && cd "$@"; }
 
 # Display searchable bash history from the most recent
 hist() {
@@ -63,8 +63,10 @@ bind '"\C-f": "fzf_vim\n"'
 fortune | cowsay
 
 alias ..="cdl .."
-alias ls="ls -a"
-alias cap="tolsdir capstone"
+alias l="ls -a"
+alias v="vim"
+alias cap="cdl ~/learn_to_code/launch_school/capstone"
+alias job="cdl ~/learn_to_code/launch_school/capstone/get-a-job"
 alias ber="bundle exec ruby"
 
 alias docker="sudo docker"
@@ -87,6 +89,9 @@ alias postgres="sudo /etc/init.d/postgresql start"
 # Open directory in windows explorer
 alias open="explorer.exe"
 alias ocd="explorer.exe ." # Open Current Directory in windows explorer
+
+export GOROOT=/usr/local/go/
+export PATH=$PATH:$GOROOT/bin
 
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin

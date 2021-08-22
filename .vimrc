@@ -1,28 +1,37 @@
 " Auto install Vim-Plugged
 if empty(glob('~/.vim/autoload/plug.vim'))
+  hi
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 call plug#begin('~/.vim/plugged')
-  Plug 'preservim/nerdtree'
-  Plug 'ryanoasis/vim-devicons'
-  Plug 'tpope/vim-sensible'
-  Plug 'tpope/vim-surround'
-  Plug '907th/vim-auto-save'
-  Plug 'edkolev/tmuxline.vim'
-  Plug 'morhetz/gruvbox'
-  Plug 'MarcWeber/vim-addon-mw-utils'
-  Plug 'tomtom/tlib_vim'
-  Plug 'alvan/vim-closetag'
-  Plug 'maxmellon/vim-jsx-pretty'
-  Plug 'steven-liou/console-puts'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-  Plug 'junegunn/fzf.vim'
+Plug 'preservim/nerdtree'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+Plug '907th/vim-auto-save'
+Plug 'edkolev/tmuxline.vim'
+Plug 'morhetz/gruvbox'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'alvan/vim-closetag'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'steven-liou/console-puts'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'mattn/emmet-vim'
+Plug 'justinmk/vim-sneak'
+Plug 'easymotion/vim-easymotion'
+" Plug 'unblevable/quick-scope'
+Plug 'romainl/vim-cool'
+Plug 'ciaranm/detectindent'
+Plug 'vim-autoformat/vim-autoformat'
 
-	" Javascript plugins
-  Plug 'sheerun/vim-polyglot'
+" let plugins
+Plug 'sheerun/vim-polyglot'
 call plug#end()
 
 " Set color scheme
@@ -76,6 +85,10 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
+" Intuitive Tab navigation
+map tl gt
+map th gT
+
 " Don't create swapfiles
 set noswapfile
 
@@ -128,13 +141,16 @@ autocmd Filetype javascript nnoremap <leader>r :!node %:p<CR>
 nmap <leader>s ysiw
 
 "Autoindent everything and return to where you left off
-nmap <leader>= gg=G<C-o><C-o>
+nmap <leader>i :Autoformat<CR>
 
 "Easy binding for autologging lines of code (steven-liou/console-puts plugin)
 nmap <leader>l cp0j
 
 "Save+quit remapping
 nmap <leader>q :wq<CR>
+
+" G jumps to end of last line
+nnoremap G G$
 
 " NERDTree config
 nmap <leader>t :NERDTreeFind<CR>
@@ -148,11 +164,39 @@ nmap <leader>f :GFiles<CR>
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gr <Plug>(coc-references)
 
+" Remap keys for applying codeAction to the current line.
+nmap <leader>ac  <Plug>(coc-codeaction)
+
+" Enable CoC select autocomplete with tab
+inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<C-g>u\<TAB>"
+
 if ! has('gui_running')
-    set ttimeoutlen=10
-    augroup FastEscape
-        autocmd!
-        au InsertEnter * set timeoutlen=0
-        au InsertLeave * set timeoutlen=1000
-    augroup END
+  set ttimeoutlen=10
+  augroup FastEscape
+    autocmd!
+    au InsertEnter * set timeoutlen=0
+    au InsertLeave * set timeoutlen=1000
+  augroup END
 endif
+
+"""""""""""""""""
+""" VIM-SNEAK """
+"""""""""""""""""
+" Remapping s (sneak) to m (move)
+map 1 <Plug>Sneak_s
+map ! <Plug>Sneak_S
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
+" Enable EasyMotion like jump points for multiple vim-sneak results
+let g:sneak#label = 1
+let g:sneak#s_next = 1
+
+
+""""""""""""""""""""
+"""" QUICK-SCOPE """
+""""""""""""""""""""
+"let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+"highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+"highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
